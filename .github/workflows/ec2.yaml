@@ -29,12 +29,6 @@ jobs:
       - name: Checkout Source
         uses: actions/checkout@v4
 
-      # - name: Set up Java
-      #   uses: actions/setup-java@v4
-      #   with:
-      #     java-version: '17'
-      #     distribution: 'temurin'
-
       - name: Maven Build
         run: |
           echo "Maven build"
@@ -42,11 +36,5 @@ jobs:
           # mvn clean package -DskipTests
 
       - name: Deploy to EC2
-        # uses: appleboy/ssh-action@v1.0.3
-        # with:
-        #   host: ${{ secrets.EC2_HOST }}
-        #   username: ${{ secrets.EC2_USER }}
-        #   key: ${{ secrets.EC2_SSH_KEY }}
         run: |
             echo "Deploying ${{ inputs.app_name }} to ${{ inputs.environment }}"
-            # bash ~/scripts/deploy-${{ inputs.environment }}.sh
