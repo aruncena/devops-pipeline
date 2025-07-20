@@ -31,8 +31,8 @@ jobs:
       - name: Maven Build
         run: |
           echo "Maven build"
-          # cd apps/${{ inputs.app_name }}
-          # mvn clean package -DskipTests
+          cd apps/${{ inputs.app_name }}
+          mvn clean package -DskipTests
 
       - name: Install sshpass
         run: sudo apt-get update && sudo apt-get install -y sshpass
