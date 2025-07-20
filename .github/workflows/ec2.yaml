@@ -35,13 +35,13 @@ jobs:
           ls -lR
           mvn clean package -DskipTests
 
-      - name: Install sshpass
-        run: sudo apt-get update && sudo apt-get install -y sshpass
+      # - name: Install sshpass
+      #   run: sudo apt-get update && sudo apt-get install -y sshpass
 
       - name: Deploy to EC2
         run: |
           echo "Deploying ${{ inputs.app_name }} to ${{ inputs.environment }}"
-          scp -pr ./github "${{ secrets.EC2_PASSWORD }}" -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:/tmp
+          scp hello-world-maven.war "${{ secrets.EC2_PASSWORD }}" -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:/tmp
             echo "Connected to EC2"
             # bash ~/scripts/deploy-${{ inputs.environment }}.sh
           
