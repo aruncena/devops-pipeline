@@ -34,6 +34,11 @@ jobs:
           pwd
           ls -lR
           mvn clean package -DskipTests
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: war-artifact
+          path: target/*.war    
 
       # - name: Install sshpass
       #   run: sudo apt-get update && sudo apt-get install -y sshpass
