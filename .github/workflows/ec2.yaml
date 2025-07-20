@@ -33,7 +33,6 @@ jobs:
           echo "Maven build"
           pwd
           ls -lR
-          cd apps/${{ inputs.app_name }}
           mvn clean package -DskipTests
 
       - name: Install sshpass
