@@ -14,12 +14,11 @@ on:
         required: true
       EC2_USER:
         required: true
-      EC2_SSH_KEY:
+      EC2_PASSWORD:
         required: true
-
 jobs:
   build-and-deploy:
-    runs-on: ubuntu-latest #ec2-runner
+    runs-on: ubuntu-latest  # or your custom runner
 
     environment:
       name: ${{ inputs.environment }}
@@ -35,6 +34,52 @@ jobs:
           # cd apps/${{ inputs.app_name }}
           # mvn clean package -DskipTests
 
+      - name: Install sshpass
+        run: sudo apt-get update && sudo apt-get install -y sshpass
+
       - name: Deploy to EC2
         run: |
-            echo "Deploying ${{ inputs.app_name }} to ${{ inputs.environment }}"
+          echo "Deploying ${{ inputs.app_name }} to ${{ inputs.environment }}"
+          sshpass -p "${{ secrets.EC2_PASSWORD }}" ssh -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << EOF
+            echo "Connected to EC2"
+            # bash ~/scripts/deploy-${{ inputs.environment }}.sh
+          EOF
+
+# on:
+#   workflow_call:
+#     inputs:
+#       environment:
+#         required: true
+#         type: string
+#       app_name:
+#         required: true
+#         type: string
+#     secrets:
+#       EC2_HOST:
+#         required: true
+#       EC2_USER:
+#         required: true
+#       EC2_SSH_KEY:
+#         required: true
+
+# jobs:
+#   build-and-deploy:
+#     runs-on: ubuntu-latest #ec2-runner
+
+#     environment:
+#       name: ${{ inputs.environment }}
+#       # Optional: Add protection rules in GitHub UI for approval
+
+#     steps:
+#       - name: Checkout Source
+#         uses: actions/checkout@v4
+
+#       - name: Maven Build
+#         run: |
+#           echo "Maven build"
+#           # cd apps/${{ inputs.app_name }}
+#           # mvn clean package -DskipTests
+
+#       - name: Deploy to EC2
+#         run: |
+#             echo "Deploying ${{ inputs.app_name }} to ${{ inputs.environment }}"
